@@ -5,9 +5,9 @@ import {
   HttpLink,
 } from "@apollo/client";
 import { setContext } from "@apollo/client/link/context";
-
 import configEnv from "../config/config";
 import { useState } from "react";
+import { TApolloClientProps } from "./decorator";
 
 const httpLink = new HttpLink({
   uri: configEnv.apiUrl,
@@ -29,11 +29,7 @@ const createApolloClient = () => {
   });
 };
 
-type Props = {
-  children: React.ReactNode;
-};
-
-export const ApolloContextProvider = ({ children }: Props) => {
+export const ApolloContextProvider = ({ children }: TApolloClientProps) => {
   const [client] = useState(createApolloClient());
 
   return <ApolloProvider client={client}>{children}</ApolloProvider>;
