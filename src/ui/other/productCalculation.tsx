@@ -1,23 +1,14 @@
-import { gql, useQuery } from "@apollo/client";
+import { useQuery } from "@apollo/client";
 import Statistic from "antd/es/statistic/Statistic";
 import { useEffect } from "react";
-import { setProducts } from "./redux/product.slice";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "./redux/store";
-import { ProductTable } from "./ui";
+import { setProducts } from "redux/product.slice";
+import { RootState } from "redux/store";
+import { ProductQuery } from "service";
+import styled from "styled-components";
+import { ProductTable } from "ui/table";
 
-const ProductQuery = gql`
-  query Products {
-    products {
-      id
-      name
-      price
-      stock
-    }
-  }
-`;
-
-export function Products(): JSX.Element {
+export function ProductCalculation(): JSX.Element {
   const { data } = useQuery(ProductQuery);
   const dispatch = useDispatch();
   const products = useSelector(
@@ -35,16 +26,21 @@ export function Products(): JSX.Element {
   );
 
   return (
-    <div>
-      <div style={{ display: "flex", justifyContent: "space-between" }}>
+    <>
+      <Wrapper>
         <Statistic title="Total products" value={totlaproduct} />
         <Statistic
           title="Total value/price of products"
           value={totalValueOfProducts?.toFixed(2)}
         />
-      </div>
+      </Wrapper>
 
       <ProductTable />
-    </div>
+    </>
   );
 }
+
+const Wrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
+`;

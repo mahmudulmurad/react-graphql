@@ -1,10 +1,10 @@
-import { Products } from "../../Products";
+import { ProductCalculation } from "ui";
 import AppLayout from "layout";
 
 const Starter = () => {
   return (
     <AppLayout>
-      <Products />
+      <ProductCalculation />
     </AppLayout>
   );
 };

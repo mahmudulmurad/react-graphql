@@ -24,6 +24,11 @@ const columns = [
     dataIndex: "stock",
     key: "stock",
   },
+  {
+    title: "Description",
+    dataIndex: "description",
+    key: "description",
+  },
 ];
 
 export const ProductTable = () => {

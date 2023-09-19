@@ -4,23 +4,53 @@ import {
   TCreateProductForm,
   createProductFormDefaultValue,
   createProductFormValidation,
-} from "./createProduct.decorator";
+} from "./decorator";
 import { Form } from "antd";
 import { UiFormTextField } from "component/form";
 import { UiButton } from "component/common";
+import { useMutation } from "@apollo/client";
+import { CreateProductMutation } from "service";
+import { useDispatch } from "react-redux";
+import { pushSingleProduct } from "redux/product.slice";
 
-function CreateProductFrom() {
+export function CreateProductFrom() {
+  const [addProduct] = useMutation(CreateProductMutation);
+  const dispatch = useDispatch();
   const {
     handleSubmit,
     control,
+    reset,
     formState: { errors, isSubmitting },
   } = useForm<TCreateProductForm>({
     resolver: zodResolver(createProductFormValidation),
     defaultValues: createProductFormDefaultValue,
   });
 
-  const onSubmit = (data: any) => {
-    console.log(data);
+  const onSubmit = async (data: TCreateProductForm) => {
+    const formDdata = data;
+    try {
+      const { data } = await addProduct({
+        variables: {
+          name: formDdata.name,
+          description: formDdata.description,
+          price: parseFloat(formDdata.price),
+          stock: parseInt(formDdata.stock),
+        },
+      });
+      const res = data?.insert_products_one;
+      dispatch(
+        pushSingleProduct({
+          id: res.id,
+          price: res.price,
+          stock: res.stock,
+          name: res.name,
+          description: res.description,
+        })
+      );
+      reset();
+    } catch (err) {
+      console.error("Error creating product:", err);
+    }
   };
   const onFinishFailed = (errorInfo: any) => {
     console.log("Failed:", errorInfo);
@@ -38,21 +68,6 @@ function CreateProductFrom() {
       autoComplete="off"
     >
       <Form.Item<TCreateProductForm>
-        label="Id"
-        name="id"
-        rules={[{ required: true, message: "Please enter product Id" }]}
-      >
-        <UiFormTextField
-          control={control}
-          errors={errors}
-          name="id"
-          title="Id"
-          placeholder="Enter product id"
-          type="number"
-        />
-      </Form.Item>
-
-      <Form.Item<TCreateProductForm>
         label="Name"
         name="name"
         rules={[{ required: true, message: "Please enter product Name" }]}
@@ -65,6 +80,17 @@ function CreateProductFrom() {
           placeholder="Enter product name"
         />
       </Form.Item>
+
+      <Form.Item<TCreateProductForm> label="Description" name="description">
+        <UiFormTextField
+          control={control}
+          errors={errors}
+          name="description"
+          title="Description"
+          placeholder="Enter product description"
+        />
+      </Form.Item>
+
       <Form.Item<TCreateProductForm>
         label="Price"
         name="price"
@@ -99,5 +125,3 @@ function CreateProductFrom() {
     </Form>
   );
 }
-
-export default CreateProductFrom;

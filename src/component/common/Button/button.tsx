@@ -13,6 +13,7 @@ export interface IUiButtonProps {
   htmlType?: "submit" | "button";
   danger?: boolean;
   onClick?: (event: React.MouseEvent<HTMLElement>) => void;
+  style?: React.CSSProperties;
 }
 export function UiButton(props: IUiButtonProps) {
   const {
@@ -26,6 +27,7 @@ export function UiButton(props: IUiButtonProps) {
     title,
     disabled,
     onClick,
+    style,
   } = props;
 
   return (
@@ -38,6 +40,7 @@ export function UiButton(props: IUiButtonProps) {
       disabled={disabled || loading}
       danger={danger}
       onClick={onClick}
+      style={style}
     >
       {title}
     </Button>

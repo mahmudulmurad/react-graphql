@@ -5,6 +5,7 @@ import { RootState } from "./store";
 interface IProduct {
   id: number;
   name: string;
+  description: string;
   price: number;
   stock: number;
 }
@@ -27,9 +28,26 @@ export const productSlice = createSlice({
       const { productList } = action.payload;
       state.productList = productList;
     },
+    pushSingleProduct: (state, action: PayloadAction<IProduct>) => {
+      const { id, name, price, stock, description } = action.payload;
+      const updatedProductList = [
+        ...state.productList,
+        {
+          id,
+          name,
+          price,
+          stock,
+          description,
+        },
+      ];
+      return {
+        ...state,
+        productList: updatedProductList,
+      };
+    },
   },
 });
 
-export const { setProducts } = productSlice.actions;
+export const { setProducts, pushSingleProduct } = productSlice.actions;
 
 export default productSlice.reducer;
