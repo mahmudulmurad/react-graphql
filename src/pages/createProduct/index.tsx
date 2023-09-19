@@ -1,5 +1,7 @@
+import CreateProductFrom from "./createProductFrom";
+
 const CreateProduct = () => {
-  return <div>CreateProduct</div>;
+  return <CreateProductFrom />;
 };
 
 export default CreateProduct;

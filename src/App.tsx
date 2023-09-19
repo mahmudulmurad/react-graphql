@@ -1,17 +1,20 @@
-import "./App.css";
-import { Products } from "./Products";
+import routes from "./routes/route";
 import { ApolloContextProvider } from "./apolloClient";
-import AppLayout from "./layout";
 import { store } from "./redux/store";
 import { Provider } from "react-redux";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 
 function App() {
   return (
     <Provider store={store}>
       <ApolloContextProvider>
-        <AppLayout>
-          <Products />
-        </AppLayout>
+        <BrowserRouter>
+          <Routes>
+            {routes.map((route, index) => (
+              <Route key={index} path={route.path} element={route.element} />
+            ))}
+          </Routes>
+        </BrowserRouter>
       </ApolloContextProvider>
     </Provider>
   );

@@ -15,8 +15,8 @@ const routes: RouteObject[] = [
     path: "/create-product",
     element: <PublicRoutes element={<CreateProduct />} />,
   },
-
   //protected routes
+  //doing it for scalability- nit applicable now
   {
     path: "/create-product",
     element: (
@@ -24,6 +24,7 @@ const routes: RouteObject[] = [
     ),
     caseSensitive: true,
   },
+
   //not found routes
   { path: "*", element: <NotFoundRoutes /> },
 ];

@@ -1,10 +1,10 @@
-import { gql, useApolloClient, useQuery } from "@apollo/client";
+import { gql, useQuery } from "@apollo/client";
 import Statistic from "antd/es/statistic/Statistic";
-import { ProductTable } from "./ui/table";
 import { useEffect } from "react";
 import { setProducts } from "./redux/product.slice";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "./redux/store";
+import { ProductTable } from "./ui";
 
 const ProductQuery = gql`
   query Products {
@@ -18,7 +18,6 @@ const ProductQuery = gql`
 `;
 
 export function Products(): JSX.Element {
-  const client = useApolloClient();
   const { data } = useQuery(ProductQuery);
   const dispatch = useDispatch();
   const products = useSelector(
@@ -28,7 +27,7 @@ export function Products(): JSX.Element {
 
   useEffect(() => {
     dispatch(setProducts({ productList: data?.products }));
-  }, [data]);
+  }, [data, dispatch]);
 
   const totalValueOfProducts = products?.reduce(
     (acc, curr) => acc + curr.price,

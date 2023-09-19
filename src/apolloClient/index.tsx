@@ -5,9 +5,9 @@ import {
   HttpLink,
 } from "@apollo/client";
 import { setContext } from "@apollo/client/link/context";
-import configEnv from "../config/config";
 import { useState } from "react";
 import { TApolloClientProps } from "./decorator";
+import configEnv from "config";
 
 const httpLink = new HttpLink({
   uri: configEnv.apiUrl,
