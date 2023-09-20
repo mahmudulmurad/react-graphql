@@ -1,32 +1,19 @@
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  TCreateProductForm,
-  createProductFormDefaultValue,
-  createProductFormValidation,
-} from "./decorator";
-import { Form } from "antd";
-import { UiFormTextField } from "component/form";
-import { UiButton } from "component/common";
+import { TCreateProductForm } from "./decorator";
+import { Form, Input, InputNumber } from "antd";
 import { useMutation } from "@apollo/client";
 import { CreateProductMutation } from "service";
 import { useDispatch } from "react-redux";
 import { pushSingleProduct } from "redux/product.slice";
+import styled from "styled-components";
+import { UiButton } from "component/Button";
 
 export function CreateProductFrom() {
   const [addProduct] = useMutation(CreateProductMutation);
   const dispatch = useDispatch();
-  const {
-    handleSubmit,
-    control,
-    reset,
-    formState: { errors, isSubmitting },
-  } = useForm<TCreateProductForm>({
-    resolver: zodResolver(createProductFormValidation),
-    defaultValues: createProductFormDefaultValue,
-  });
 
   const onSubmit = async (data: TCreateProductForm) => {
+    console.log(data);
+
     const formDdata = data;
     try {
       const { data } = await addProduct({
@@ -47,81 +34,111 @@ export function CreateProductFrom() {
           description: res.description,
         })
       );
-      reset();
     } catch (err) {
       console.error("Error creating product:", err);
     }
   };
+
   const onFinishFailed = (errorInfo: any) => {
     console.log("Failed:", errorInfo);
   };
 
   return (
-    <Form
-      name="basic"
-      labelCol={{ span: 8 }}
-      wrapperCol={{ span: 16 }}
-      style={{ maxWidth: 600 }}
-      initialValues={{ remember: true }}
-      onFinish={handleSubmit(onSubmit)}
-      onFinishFailed={onFinishFailed}
-      autoComplete="off"
-    >
-      <Form.Item<TCreateProductForm>
-        label="Name"
-        name="name"
-        rules={[{ required: true, message: "Please enter product Name" }]}
-      >
-        <UiFormTextField
-          control={control}
-          errors={errors}
-          name="name"
-          title="Name"
-          placeholder="Enter product name"
-        />
-      </Form.Item>
+    <Container>
+      <FormWrapper>
+        <Form
+          name="basic"
+          labelCol={{ span: 8 }}
+          wrapperCol={{ span: 16 }}
+          style={{ maxWidth: 600 }}
+          initialValues={{ remember: true }}
+          onFinish={onSubmit}
+          onFinishFailed={onFinishFailed}
+          autoComplete="off"
+        >
+          <Form.Item
+            label="Name"
+            name="name"
+            rules={[
+              { required: true, message: "Please enter the product name" },
+              { min: 4, message: "Name must be at least 4 characters" },
+            ]}
+          >
+            <StyledInput placeholder="Enter product name" />
+          </Form.Item>
 
-      <Form.Item<TCreateProductForm> label="Description" name="description">
-        <UiFormTextField
-          control={control}
-          errors={errors}
-          name="description"
-          title="Description"
-          placeholder="Enter product description"
-        />
-      </Form.Item>
+          <Form.Item label="Description" name="description">
+            <Input.TextArea placeholder="Enter product description" />
+          </Form.Item>
 
-      <Form.Item<TCreateProductForm>
-        label="Price"
-        name="price"
-        rules={[{ required: true, message: "Please enter product Price" }]}
-      >
-        <UiFormTextField
-          control={control}
-          errors={errors}
-          name="price"
-          title="Price"
-          placeholder="Enter product price"
-          type="number"
-        />
-      </Form.Item>
-      <Form.Item<TCreateProductForm>
-        label="Stock"
-        name="stock"
-        rules={[{ required: true, message: "Please enter product Stock" }]}
-      >
-        <UiFormTextField
-          control={control}
-          errors={errors}
-          name="stock"
-          title="Stock"
-          placeholder="Enter product stock"
-          type="number"
-        />
-      </Form.Item>
-      <Form.Item wrapperCol={{ offset: 4, span: 14 }}>
-        <UiButton title="Submit" htmlType="submit" loading={isSubmitting} />
-      </Form.Item>
-    </Form>
+          <Form.Item
+            label="Price"
+            name="price"
+            rules={[
+              { required: true, message: "Please enter the product price" },
+              {
+                type: "number",
+                min: 0,
+                message: "Price must be a positive number",
+              },
+            ]}
+          >
+            <StyledInputNumber placeholder="Enter product price" />
+          </Form.Item>
+
+          <Form.Item
+            label="Stock"
+            name="stock"
+            rules={[
+              {
+                required: true,
+                message: "Please enter the product stock quantity",
+              },
+              { type: "number", min: 10, message: "Stock must be at least 10" },
+            ]}
+          >
+            <StyledInputNumber placeholder="Enter product stock" />
+          </Form.Item>
+
+          <ButtonWrapper>
+            <UiButton title="Submit" htmlType="submit" type="primary" />
+          </ButtonWrapper>
+        </Form>
+      </FormWrapper>
+    </Container>
   );
 }
+
+const Container = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 90vh;
+`;
+
+const FormWrapper = styled.div`
+  width: 100%;
+  max-width: 600px;
+`;
+
+const commonStyle = `
+  padding: 8px;
+  border: 1px solid #d9d9d9;
+  border-radius: 4px;
+  font-size: 16px;
+`;
+
+const StyledInput = styled(Input)`
+  ${commonStyle}
+`;
+
+const StyledInputNumber = styled(InputNumber)`
+  ${commonStyle}
+  width: 100%;
+`;
+
+const ButtonWrapper = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 16px;
+`;

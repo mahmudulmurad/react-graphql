@@ -4,13 +4,13 @@ import { Button } from "antd";
 
 export interface IUiButtonProps {
   id?: string;
-  title?: React.ReactNode;
-  type?: TType;
+  title: React.ReactNode;
+  type: TType;
   size?: TSize;
   shape?: TShape;
   disabled?: boolean;
   loading?: boolean;
-  htmlType?: "submit" | "button";
+  htmlType: "submit" | "button";
   danger?: boolean;
   onClick?: (event: React.MouseEvent<HTMLElement>) => void;
   style?: React.CSSProperties;

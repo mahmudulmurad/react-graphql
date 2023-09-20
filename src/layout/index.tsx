@@ -1,8 +1,8 @@
 import { Layout, Typography } from "antd";
 import { TAppLayoutProps } from "./decorator";
-import { UiButton } from "component/common";
 import { useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import { UiButton } from "component/Button";
 const { Header, Content } = Layout;
 const { Title } = Typography;
 
@@ -27,6 +27,7 @@ function AppLayout({ children }: TAppLayoutProps) {
           type="primary"
           title={path ? "Product details" : "Create new product"}
           onClick={handleClick}
+          htmlType="button"
         />
       </StyledHeader>
       <StyledContent>{children}</StyledContent>
@@ -38,6 +39,8 @@ export default AppLayout;
 
 const StyledLayout = styled(Layout)`
   height: 100vh;
+  width: 100%;
+  position: fixed;
 `;
 
 const StyledHeader = styled(Header)`
@@ -55,4 +58,5 @@ const StyledTitle = styled(Title)`
 const StyledContent = styled(Content)`
   padding: 1em;
   text-align: center;
+  overflow: scroll;
 `;
