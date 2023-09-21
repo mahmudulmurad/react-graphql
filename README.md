@@ -22,7 +22,7 @@ Please complete all of the following:
 
 ## Developer Remarks
 
-I have to chnage the docker-compose.yml a bit to fix the database from postgres to db.
+I'd to change the docker-compose.yml a bit to fix the database from postgres to db
 
 ## Run the application
 
