@@ -6,25 +6,28 @@ import { useDispatch } from "react-redux";
 import { pushSingleProduct } from "redux/product.slice";
 import styled from "styled-components";
 import { UiButton } from "component/Button";
+import { toast } from "react-toastify";
+import { Toast } from "component/Toast";
 
-export function CreateProductFrom() {
+export const CreateProductFrom: React.FC<{}> = () => {
   const [addProduct] = useMutation(CreateProductMutation);
   const dispatch = useDispatch();
 
   const onSubmit = async (data: TCreateProductForm) => {
-    console.log(data);
-
-    const formDdata = data;
+    const formData = data;
     try {
       const { data } = await addProduct({
         variables: {
-          name: formDdata.name,
-          description: formDdata.description,
-          price: parseFloat(formDdata.price),
-          stock: parseInt(formDdata.stock),
+          name: formData.name,
+          description: formData.description,
+          price: parseFloat(formData.price),
+          stock: parseInt(formData.stock),
         },
       });
       const res = data?.insert_products_one;
+      if (res) {
+        toast.success("product created");
+      }
       dispatch(
         pushSingleProduct({
           id: res.id,
@@ -35,12 +38,12 @@ export function CreateProductFrom() {
         })
       );
     } catch (err) {
-      console.error("Error creating product:", err);
+      toast.error("Something went wrong");
     }
   };
 
-  const onFinishFailed = (errorInfo: any) => {
-    console.log("Failed:", errorInfo);
+  const onFinishFailed = () => {
+    toast.error("Form submission failed");
   };
 
   return (
@@ -105,9 +108,10 @@ export function CreateProductFrom() {
           </ButtonWrapper>
         </Form>
       </FormWrapper>
+      <Toast />
     </Container>
   );
-}
+};
 
 const Container = styled.div`
   display: flex;

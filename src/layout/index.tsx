@@ -1,12 +1,12 @@
 import { Layout, Typography } from "antd";
-import { TAppLayoutProps } from "./decorator";
 import { useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import { TAppLayoutProps } from "./decorator";
 import { UiButton } from "component/Button";
 const { Header, Content } = Layout;
 const { Title } = Typography;
 
-function AppLayout({ children }: TAppLayoutProps) {
+const AppLayout = ({ children }: TAppLayoutProps) => {
   const navigate = useNavigate();
   const location = useLocation();
   const path = location.pathname === "/create-product";
@@ -33,7 +33,7 @@ function AppLayout({ children }: TAppLayoutProps) {
       <StyledContent>{children}</StyledContent>
     </StyledLayout>
   );
-}
+};
 
 export default AppLayout;
 

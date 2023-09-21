@@ -15,7 +15,7 @@ export interface IUiButtonProps {
   onClick?: (event: React.MouseEvent<HTMLElement>) => void;
   style?: React.CSSProperties;
 }
-export function UiButton(props: IUiButtonProps) {
+export const UiButton = (props: IUiButtonProps) => {
   const {
     id,
     danger,
@@ -45,4 +45,4 @@ export function UiButton(props: IUiButtonProps) {
       {title}
     </Button>
   );
-}
+};

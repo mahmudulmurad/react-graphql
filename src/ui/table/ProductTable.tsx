@@ -33,6 +33,7 @@ const columns = [
 
 export const ProductTable = () => {
   const products = useSelector((state: RootState) => state.product);
+
   return (
     <Table
       dataSource={dataFormatter(products?.productList)}

@@ -16,7 +16,7 @@ const routes: RouteObject[] = [
     element: <PublicRoutes element={<CreateProduct />} />,
   },
   //protected routes
-  //doing it for scalability- nit applicable now
+  //doing it for scalability- not applicable now
   {
     path: "/create-product",
     element: (

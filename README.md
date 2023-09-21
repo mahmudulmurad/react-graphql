@@ -20,6 +20,10 @@ Please complete all of the following:
 1. Calculate total value of all products in the inventory
 1. Create a form to add new product to inventory
 
+## Developer Remarks
+
+I have to chnage the docker-compose.yml a bit to fix the database from postgres to db.
+
 ## Run the application
 
 ```sh

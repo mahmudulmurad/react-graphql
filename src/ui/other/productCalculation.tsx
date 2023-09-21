@@ -1,24 +1,12 @@
-import { useQuery } from "@apollo/client";
-import Statistic from "antd/es/statistic/Statistic";
-import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { setProducts } from "redux/product.slice";
-import { RootState } from "redux/store";
-import { ProductQuery } from "service";
+import { useSelector } from "react-redux";
 import styled from "styled-components";
-import { ProductTable } from "ui/table";
+import { RootState } from "redux/store";
+import Statistic from "antd/es/statistic/Statistic";
 
-export function ProductCalculation(): JSX.Element {
-  const { data } = useQuery(ProductQuery);
-  const dispatch = useDispatch();
+export const ProductCalculation: React.FC<{}> = () => {
   const products = useSelector(
     (state: RootState) => state.product?.productList
   );
-  const totlaproduct = products?.length;
-
-  useEffect(() => {
-    dispatch(setProducts({ productList: data?.products }));
-  }, [data, dispatch]);
 
   const totalValueOfProducts = products?.reduce(
     (acc, curr) => acc + curr.price,
@@ -26,19 +14,15 @@ export function ProductCalculation(): JSX.Element {
   );
 
   return (
-    <>
-      <Wrapper>
-        <Statistic title="Total products" value={totlaproduct} />
-        <Statistic
-          title="Total value/price of products"
-          value={totalValueOfProducts?.toFixed(2)}
-        />
-      </Wrapper>
-
-      <ProductTable />
-    </>
+    <Wrapper>
+      <Statistic title="Total products" value={products?.length} />
+      <Statistic
+        title="Total value/price of products"
+        value={totalValueOfProducts?.toFixed(2)}
+      />
+    </Wrapper>
   );
-}
+};
 
 const Wrapper = styled.div`
   display: flex;
