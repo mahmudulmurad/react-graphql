@@ -1,7 +1,9 @@
+// import { useSelector } from "react-redux";
+// import { RootState } from "../../redux/store";
 import { Table } from "antd";
-import { useSelector } from "react-redux";
-import { RootState } from "../../redux/store";
-import { dataFormatter } from "../../service";
+import { ProductQuery, dataFormatter } from "../../service";
+import { useApolloClient } from "@apollo/client";
+import { TProduct } from "ui/other";
 
 const columns = [
   {
@@ -32,12 +34,13 @@ const columns = [
 ];
 
 export const ProductTable = () => {
-  const products = useSelector((state: RootState) => state.product);
+  // const products = useSelector((state: RootState) => state.product);
 
-  return (
-    <Table
-      dataSource={dataFormatter(products?.productList)}
-      columns={columns}
-    />
-  );
+  const cachedProducts = useApolloClient().readQuery({
+    query: ProductQuery,
+  });
+
+  const productsArray: TProduct[] = cachedProducts?.products || [];
+
+  return <Table dataSource={dataFormatter(productsArray)} columns={columns} />;
 };
